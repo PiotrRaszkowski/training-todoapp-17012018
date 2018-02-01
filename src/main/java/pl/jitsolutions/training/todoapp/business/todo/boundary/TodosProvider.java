@@ -21,4 +21,8 @@ public class TodosProvider {
         TypedQuery<Todo> query = entityManager.createQuery("SELECT t FROM Todo t", Todo.class);
         return query.getResultList();
     }
+
+    public Todo getTodo(Long id) {
+        return entityManager.find(Todo.class, id);
+    }
 }

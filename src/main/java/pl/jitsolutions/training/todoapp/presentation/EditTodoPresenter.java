@@ -1,12 +1,14 @@
 package pl.jitsolutions.training.todoapp.presentation;
 
 import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.jitsolutions.training.todoapp.business.todo.boundary.TodoEditor;
+import pl.jitsolutions.training.todoapp.business.todo.boundary.TodosProvider;
 import pl.jitsolutions.training.todoapp.business.todo.entity.Todo;
 
 @ViewScoped
@@ -21,14 +23,20 @@ public class EditTodoPresenter implements Serializable {
     @Setter
     private Long id;
 
-    @Inject
-    private TodosPresenter todosPresenter;
+    @EJB
+    private TodoEditor todoEditor;
+
+    @EJB
+    private TodosProvider todosProvider;
 
     public void preRenderView() {
-        todo = todosPresenter.getTodos().stream().filter(t -> t.getId().equals(id)).findAny().get();
+        todo = todosProvider.getTodo(id);
     }
 
     public String save() {
+        todo.setOwnerId(-1L);
+        todoEditor.edit(todo);
+
         return "todos";
     }
 }

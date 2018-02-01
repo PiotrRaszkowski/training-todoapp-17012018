@@ -35,6 +35,8 @@ public class Todo implements Serializable {
 
     private boolean theMostImportantTodo;
 
+    private Long ownerId;
+
     @PrePersist
     public void prePersist() {
         creationDateTime = LocalDateTime.now();
