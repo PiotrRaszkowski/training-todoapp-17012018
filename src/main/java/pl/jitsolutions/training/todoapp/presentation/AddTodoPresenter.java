@@ -1,13 +1,13 @@
 package pl.jitsolutions.training.todoapp.presentation;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.jitsolutions.training.todoapp.business.todo.boundary.TodoCreator;
 import pl.jitsolutions.training.todoapp.business.todo.entity.Todo;
 
 @ViewScoped
@@ -18,14 +18,11 @@ public class AddTodoPresenter implements Serializable {
     @Setter
     private Todo newTodo = new Todo();
 
-    @Inject
-    private TodosPresenter todosPresenter;
+    @EJB
+    private TodoCreator todoCreator;
 
     public String save() {
-        newTodo.setCreationDateTime(LocalDateTime.now());
-        newTodo.setId(todosPresenter.getTodos().get(todosPresenter.getTodos().size()-1).getId()+1);
-
-        todosPresenter.getTodos().add(newTodo);
+        todoCreator.create(newTodo);
 
         return "todos";
     }

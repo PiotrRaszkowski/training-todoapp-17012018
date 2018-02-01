@@ -1,46 +1,47 @@
-package pl.jitsolutions.training.todoapp.presentation;
+package pl.jitsolutions.training.todoapp.test;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import lombok.Getter;
 import pl.jitsolutions.training.todoapp.business.todo.entity.Todo;
 
-@SessionScoped
-public class TodosHolder implements Serializable {
+@Singleton
+@Startup
+public class TestDataLoader {
 
-    @Getter
-    private List<Todo> todos = new ArrayList<>();
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @PostConstruct
     public void init() {
+        System.out.println("Loading test data...");
+
         Todo todo1 = Todo.builder()
-                .id(1L)
                 .title("Todo 1")
                 .description("Description 1")
                 .creationDateTime(LocalDateTime.now())
                 .build();
 
+        entityManager.persist(todo1);
+
         Todo todo2 = Todo.builder()
-                .id(2L)
                 .title("Todo 2")
                 .description("Description 2")
                 .creationDateTime(LocalDateTime.now())
                 .build();
 
+        entityManager.persist(todo2);
+
         Todo todo3 = Todo.builder()
-                .id(3L)
                 .title("Todo 3")
                 .description("Description 3")
                 .creationDateTime(LocalDateTime.now())
                 .build();
 
-        todos.add(todo1);
-        todos.add(todo2);
-        todos.add(todo3);
+        entityManager.persist(todo3);
     }
 }
